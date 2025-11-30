@@ -5,9 +5,7 @@ import { Link, NavLink } from "react-router-dom";
 const Navbar = () => {
   const navItems = [
     { name: "Home", path: "/", icon: <Home size={20} /> },
-    { name: "Add Product", path: "/add", icon: <PlusCircle size={20} /> },
     { name: "Favorites", path: "/favorites", icon: <Star size={20} /> },
-    { name: "Profile", path: "/profile", icon: <User size={20} /> },
   ];
 
   return (

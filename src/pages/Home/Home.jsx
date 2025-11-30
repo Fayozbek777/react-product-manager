@@ -1,13 +1,15 @@
 import React from "react";
 import Navbar from "../../components/Navbar/Navbar";
 import Footer from "../../components/Footer/Footer";
-import { Star, ShoppingCart } from "lucide-react";
+import { Heart, ShoppingCart } from "lucide-react";
 import { Link } from "react-router-dom";
 import { useGetProductsQuery } from "../../app/features/apiSlice";
 import Loader from "../../components/Loader/Loader";
 
-const Home = () => {
+const Home = ({ favorites, toggleFavorite }) => {
   const { data: products, error, isLoading } = useGetProductsQuery();
+
+  const isFavorite = (id) => favorites.some((p) => p.id === id);
 
   return (
     <div className="flex flex-col min-h-screen">
@@ -41,8 +43,13 @@ const Home = () => {
                 >
                   More Info
                 </Link>
-                <button className="text-yellow-500">
-                  <Star size={20} />
+                <button
+                  onClick={() => toggleFavorite(product)}
+                  className={`${
+                    isFavorite(product.id) ? "text-red-500" : "text-gray-400"
+                  }`}
+                >
+                  <Heart size={20} />
                 </button>
               </div>
             </div>
