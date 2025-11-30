@@ -23,32 +23,30 @@ const Home = () => {
         {error && <p>Error fetching products</p>}
 
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
-          {products &&
-            products.map((product) => (
-              <div
-                key={product.id}
-                className="border rounded-lg p-4 bg-white shadow hover:shadow-lg transition"
-              >
-                <h2 className="text-xl font-semibold mb-2">{product.title}</h2>
-                <p className="text-gray-600 mb-2">
-                  {product.description.slice(0, 50)}...
-                </p>
-                <p className="font-bold mb-4">${product.price}</p>
+          {products?.map((product) => (
+            <div
+              key={product.id}
+              className="border rounded-lg p-4 bg-white shadow hover:shadow-lg transition"
+            >
+              <h2 className="text-xl font-semibold mb-2">{product.title}</h2>
+              <p className="text-gray-600 mb-2">
+                {product.description?.slice(0, 50)}...
+              </p>
+              <p className="font-bold mb-4">${product.price}</p>
 
-                <div className="flex justify-between items-center">
-                  <Link
-                    to={`/products/${product.id}`}
-                    className="text-blue-600 hover:underline"
-                  >
-                    More Info
-                  </Link>
-
-                  <button className="text-yellow-500">
-                    <Star size={20} />
-                  </button>
-                </div>
+              <div className="flex justify-between items-center">
+                <Link
+                  to={`/products/${product.id}`}
+                  className="text-blue-600 hover:underline"
+                >
+                  More Info
+                </Link>
+                <button className="text-yellow-500">
+                  <Star size={20} />
+                </button>
               </div>
-            ))}
+            </div>
+          ))}
         </div>
       </main>
 
