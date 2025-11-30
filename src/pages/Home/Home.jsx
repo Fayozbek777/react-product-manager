@@ -1,65 +1,42 @@
-import React, { useState, useMemo } from "react";
+import React, { useMemo } from "react";
 import Navbar from "../../components/Navbar/Navbar";
 import Footer from "../../components/Footer/Footer";
-import { Heart, ShoppingCart, ChevronDown } from "lucide-react";
+import { Heart, ShoppingCart } from "lucide-react";
 import { Link } from "react-router-dom";
 import { useGetProductsQuery } from "../../app/features/apiSlice";
 import Loader from "../../components/Loader/Loader";
+import toast from "react-hot-toast";
 
 const Home = ({ favorites, toggleFavorite }) => {
   const { data: products, error, isLoading } = useGetProductsQuery();
-  const [searchTerm, setSearchTerm] = useState("");
-  const [sortBy, setSortBy] = useState(""); // "price" yoki "name"
 
   const isFavorite = (id) => favorites.some((p) => p.id === id);
 
-  // Filter + Sort
+  const handleFavoriteClick = (product) => {
+    toggleFavorite(product);
+
+    if (favorites.find((p) => p.id === product.id)) {
+      toast(`Removed from favorites: ${product.title}`, { icon: "💔" });
+    } else {
+      toast(`Added to favorites: ${product.title}`, { icon: "❤️" });
+    }
+  };
+
+  // Filter + Sort (agar kerak bo‘lsa)
   const filteredProducts = useMemo(() => {
     if (!products) return [];
-    let filtered = products.filter((p) =>
-      p.title.toLowerCase().includes(searchTerm.toLowerCase())
-    );
-
-    if (sortBy === "price") {
-      filtered.sort((a, b) => a.price - b.price);
-    } else if (sortBy === "name") {
-      filtered.sort((a, b) => a.title.localeCompare(b.title));
-    }
-
-    return filtered;
-  }, [products, searchTerm, sortBy]);
+    return products;
+  }, [products]);
 
   return (
     <div className="flex flex-col min-h-screen">
       <Navbar />
 
       <main className="flex-1 p-6 bg-gray-50">
-        <div className="flex items-center justify-between mb-6">
-          <h1 className="text-3xl font-bold flex items-center gap-2">
-            <ShoppingCart size={28} />
-            Products
-          </h1>
-
-          {/* Search */}
-          <input
-            type="text"
-            placeholder="Search by name..."
-            className="border rounded px-3 py-1"
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-          />
-
-          {/* Sort */}
-          <select
-            className="border rounded px-3 py-1"
-            value={sortBy}
-            onChange={(e) => setSortBy(e.target.value)}
-          >
-            <option value="">Sort by</option>
-            <option value="name">Name</option>
-            <option value="price">Price</option>
-          </select>
-        </div>
+        <h1 className="text-3xl font-bold mb-6 flex items-center gap-2">
+          <ShoppingCart size={28} />
+          Products
+        </h1>
 
         {isLoading && <Loader />}
         {error && <p>Error fetching products</p>}
@@ -84,7 +61,7 @@ const Home = ({ favorites, toggleFavorite }) => {
                   More Info
                 </Link>
                 <button
-                  onClick={() => toggleFavorite(product)}
+                  onClick={() => handleFavoriteClick(product)}
                   className={`${
                     isFavorite(product.id) ? "text-red-500" : "text-gray-400"
                   }`}
